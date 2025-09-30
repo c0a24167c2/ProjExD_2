@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -28,6 +29,25 @@ def cheack_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
+def gameover(screen: pg.Surface) -> None:
+    gameover_img = pg.Surface((1600, 900))
+    pg.draw.rect(gameover_img, (0, 0, 0), (0, 0, 1600, 900))
+    gameover_img.set_alpha(200)
+    gameover_rct = gameover_img.get_rect()
+    fonto = pg.font.Font(None, 50)
+    txt = fonto.render("Game Over", True, (255, 255, 255))
+    txt_rect = txt.get_rect(center=(WIDTH//2, HEIGHT//2))
+    gameover_img.blit(txt, txt_rect)
+    kk2_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 0.9)
+    kk2_1_rct = kk2_img.get_rect(center = (WIDTH//2 - 140, HEIGHT//2))
+    kk2_2_rct = kk2_img.get_rect(center = (WIDTH//2 + 140, HEIGHT//2))
+    gameover_img.blit(kk2_img, kk2_1_rct)
+    gameover_img.blit(kk2_img, kk2_2_rct)
+    screen.blit(gameover_img, gameover_rct)
+    pg.display.update()
+    time.sleep(5)
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -44,14 +64,16 @@ def main():
     vx, vy = +5, +5
     clock = pg.time.Clock()
     tmr = 0
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0]) 
         if kk_rct.colliderect(bb_rct):  # こうかとんと爆弾の衝突判定
+            gameover(screen)
             return  # ゲームオーバー
-
+        
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for key, mv in DELTA.items():
