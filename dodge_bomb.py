@@ -30,6 +30,11 @@ def cheack_bound(rct: pg.Rect) -> tuple[bool, bool]:
 
 
 def gameover(screen: pg.Surface) -> None:  # ゲームオーバー画面
+    """
+    引数：表示するスクリーンSurface
+    戻り値：なし
+    ゲームオーバー画面を5秒間表示する
+    """
     gameover_img = pg.Surface((1600, 900))
     pg.draw.rect(gameover_img, (0, 0, 0), (0, 0, 1600, 900))
     gameover_img.set_alpha(200)
