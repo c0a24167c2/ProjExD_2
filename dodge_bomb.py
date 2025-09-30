@@ -48,6 +48,19 @@ def gameover(screen: pg.Surface) -> None:
     time.sleep(5)
 
 
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    bb_imgs = []
+
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_img.set_colorkey((0, 0, 0))
+        bb_imgs.append(bb_img)
+    bb_accs = [a for a in range(1, 11)]
+
+    return bb_imgs, bb_accs
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -65,6 +78,9 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
 
+    bb_imgs, bb_accs = init_bb_imgs() 
+
+    
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -80,6 +96,10 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]  #横方向の移動量を加算
                 sum_mv[1] += mv[1]  #縦方向の移動量を加算
+
+        avx = vx*bb_accs[min(tmr//500, 9)]
+        avy = vy*bb_accs[min(tmr//500, 9)]
+        bb_img = bb_imgs[min(tmr//500, 9)]
         # if key_lst[pg.K_UP]:
         #     sum_mv[1] -= 5
         # if key_lst[pg.K_DOWN]:
@@ -92,7 +112,7 @@ def main():
         if cheack_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
-        bb_rct.move_ip(vx, vy)
+        bb_rct.move_ip(avx, avy)
         yoko, tate = cheack_bound(bb_rct)
         if not yoko:  # 横方向にはみ出ていたら
             vx *= -1
