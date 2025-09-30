@@ -29,7 +29,7 @@ def cheack_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
-def gameover(screen: pg.Surface) -> None:
+def gameover(screen: pg.Surface) -> None:  # ゲームオーバー画面
     gameover_img = pg.Surface((1600, 900))
     pg.draw.rect(gameover_img, (0, 0, 0), (0, 0, 1600, 900))
     gameover_img.set_alpha(200)
@@ -48,7 +48,7 @@ def gameover(screen: pg.Surface) -> None:
     time.sleep(5)
 
 
-def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:  # 時間とともに爆弾が拡大, 加速
     bb_imgs = []
 
     for r in range(1, 11):
@@ -59,6 +59,20 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
     bb_accs = [a for a in range(1, 11)]
 
     return bb_imgs, bb_accs
+
+
+def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:  # 演習3:飛ぶ方向に従ってこうかとん画像を切り替え
+    kk_dict = {
+        ( 0,  0): rotozoom(kk_img, 0, 0.9),
+        (+5,  0): rotozoom(kk_img, 0, 0.9),
+        (+5, -5): rotozoom(kk_img, 0, 0.9),
+        ( 0, -5): rotozoom(kk_img, 0, 0.9),
+        (-5, -5): rotozoom(kk_img, 0, 0.9),
+        (-5,  0): rotozoom(kk_img, 0, 0.9),
+        (-5, +5): rotozoom(kk_img, 0, 0.9),
+        ( 0, +5): rotozoom(kk_img, 0, 0.9),
+        (+5, +5): rotozoom(kk_img, 0, 0.9),
+    }
 
 
 def main():
